@@ -1,4 +1,6 @@
 __pycache__/
 
+private/private-env
+
 .venv
 .vscode

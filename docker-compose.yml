@@ -1,0 +1,34 @@
+version: '3.7'
+
+services:
+  ngrok:
+    build:
+      context: ./
+      dockerfile: ./docker/ngrok.dockerfile
+    ports:
+      - 4551:4551
+    environment:
+      - PROTOCOL=http
+      - DOMAIN=app
+      - PORT=8666
+      - DEBUG=true
+      - BIND_TLS=true
+  redis:
+    image: "redis"
+    ports:
+      - 6379:6379
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/app.dockerfile
+    depends_on:
+      - ngrok
+      - redis
+    volumes:
+      - ./:/app
+    env_file:
+      - env
+      - private/private-env
+    ports:
+      - 8666:8666
+    command: ["python", "manage.py", "run"]
