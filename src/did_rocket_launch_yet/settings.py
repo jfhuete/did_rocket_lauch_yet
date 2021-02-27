@@ -2,13 +2,27 @@
 from os import getenv, path
 from urllib.parse import urlparse
 
+import requests
 
-def extract_domain(var_name, output):
+
+def get_ngrok_public_url():
+    """
+    Get public url supplied by ngrok
+    """
+
+    ngrok_local_url = getenv('NGROK_LOCAL_URL')
+    response = requests.get(f"{ngrok_local_url}/api/tunnels")
+    body = response.json()
+
+    return body['tunnels'][0]['public_url']
+
+
+def extract_domain(output):
     """
     Extracts just the domain name from an URL and adds it to a list
     """
 
-    var = getenv(var_name)
+    var = get_ngrok_public_url()
 
     if var:
         p = urlparse(var)
@@ -19,11 +33,12 @@ def make_whitelist():
     """
     Generates the list of whitelisted domains for webviews. This is especially
     useful when you create your Facebook Messenger configuration.
+
     Don't hesitate to change this function to add more domains if you need it.
     """
 
-    out = []
-    extract_domain('BERNARD_BASE_URL', out)
+    out = ['ngrok']
+    extract_domain(out)
     return out
 
 
@@ -102,7 +117,7 @@ if getenv('TELEGRAM_TOKEN'):
 # --- Self-awareness ---
 
 # Public base URL, used to generate links to the bot itself.
-BERNARD_BASE_URL = getenv('BERNARD_BASE_URL')
+BERNARD_BASE_URL = get_ngrok_public_url()
 
 # Secret key that serves in particular to sign content sent to the webview, but
 # also in other places where signed content is required (aka when something
