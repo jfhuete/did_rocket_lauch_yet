@@ -6,3 +6,4 @@ BERNARD_SETTINGS_FILE=src/did_rocket_launch_yet/settings.py
 WEBVIEW_SECRET_KEY=ZBpOXO[xTL5LFj1Vjb_z5BsSVl6r7HJyfuAAusZ7XsmeWgIEY6
 REDIS_URL=redis://redis:6379/1
 NGROK_LOCAL_URL=http://ngrok:4551
+THE_FRAMEX_API=https://framex-dev.wadrid.net/api/video/

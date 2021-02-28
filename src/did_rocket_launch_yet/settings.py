@@ -204,3 +204,7 @@ USERS_READING_BUBBLE_START = 0.0
 # How many words per minute can your users read? This will compute the delay
 # for each message automatically.
 USERS_READING_SPEED = 400
+
+# --- External APIs settings ---
+
+THE_FRAMEX_API = getenv('THE_FRAMEX_API')
