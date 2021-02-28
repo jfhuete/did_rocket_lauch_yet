@@ -69,6 +69,8 @@ class FirstFrame(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer()
+        analyzer.get_next_frame(is_launched=False)
+
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
             ReplyKeyboard(
@@ -89,8 +91,7 @@ class RocketNotLaunched(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer(**context['frame_analyzer'])
-
-        analyzer.get_next_frame(is_launched=False)
+        analyzer.get_next_frame(is_launched=self.trigger.is_launched)
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
@@ -113,8 +114,7 @@ class RocketLaunched(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer(**context['frame_analyzer'])
-
-        analyzer.get_next_frame(is_launched=True)
+        analyzer.get_next_frame(is_launched=self.trigger.is_launched)
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
