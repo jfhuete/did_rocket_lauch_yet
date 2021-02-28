@@ -9,16 +9,28 @@ class FrameXAnalyzer:
 
     This class consume The FrameX API and handle the user request to find the
     exact moment when the rocket is launched
+
+    :param first_frame: First frame pointer, default None
+    :type first_frame: int, optional
+    :param last_frame: Last frame pointer, default None
+    :type last_frame: int, optional
+    :param actual_frame: Actual frame pointer, default None
+    :type actual_frame: int, optional
     """
 
-    def __init__(self):
+    def __init__(self, first_frame=None, last_frame=None, actual_frame=None):
         self.api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
         self.image_loader = FrameXImage()
-        self.__actual_frame = None
+        self.__actual_frame = actual_frame
         self.image = None
-        self.last_frame = self.api.video.frames - 1
-        self.firts_frame = 0
-        self.actual_frame = self.__calculate_middle_frame()
+        self.last_frame = self.api.video.frames - 1 \
+            if last_frame is None else last_frame
+        self.first_frame = 0 if first_frame is None else first_frame
+
+        # If actual frame is None firts frame is replied. If is not None is not
+        # necessary to request the image corresponds with the actual_frame
+        if actual_frame is None:
+            self.actual_frame = self.__calculate_middle_frame()
 
     @property
     def actual_frame(self):
@@ -39,8 +51,6 @@ class FrameXAnalyzer:
 
         self.__actual_frame = frame
         self.image = self.image_loader.get_image(frame)
-
-        return self.__actual_frame
 
     def get_next_frame(self, is_launched):
         """
@@ -75,7 +85,19 @@ class FrameXAnalyzer:
         or last frame
         """
 
-        return self.actual_frame in [self.last_frame, self.firts_frame]
+        return self.actual_frame in [self.last_frame, self.first_frame]
+
+    @property
+    def instance_data(self):
+        """
+        Return a dict with necessary data to recover the state of this class
+        """
+
+        return {
+            "actual_frame": self.actual_frame,
+            "last_frame": self.last_frame,
+            "first_frame": self.first_frame
+        }
 
     def __calculate_middle_frame(self):
         """
@@ -85,4 +107,4 @@ class FrameXAnalyzer:
         :rtype: int
         """
 
-        return round((self.firts_frame + self.last_frame) / 2)
+        return round((self.first_frame + self.last_frame) / 2)
