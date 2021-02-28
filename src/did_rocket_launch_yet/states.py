@@ -72,7 +72,12 @@ class FirstFrame(DidRocketLaunchYetState):
         analyzer = FrameXAnalyzer()
 
         self.send(
-            lyr.Text(t("QUESTION", frame=analyzer.actual_frame)),
+            lyr.Markdown(t(
+                "IMAGE",
+                frame=analyzer.actual_frame,
+                url=analyzer.actual_frame_url
+            )),
+            lyr.Markdown(t.QUESTION),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.YES), KeyboardButton(t.NO)],
@@ -93,7 +98,12 @@ class RocketNotLaunched(DidRocketLaunchYetState):
         analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
-            lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
+            lyr.Markdown(t(
+                "IMAGE",
+                frame=analyzer.actual_frame,
+                url=analyzer.actual_frame_url
+            )),
+            lyr.Markdown(t.QUESTION),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.YES), KeyboardButton(t.NO)],
@@ -113,7 +123,12 @@ class RocketLaunched(DidRocketLaunchYetState):
         analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
-            lyr.Text(t("QUESTION", frame=analyzer.actual_frame)),
+            lyr.Markdown(t(
+                "IMAGE",
+                frame=analyzer.actual_frame,
+                url=analyzer.actual_frame_url
+            )),
+            lyr.Markdown(t.QUESTION),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.YES), KeyboardButton(t.NO)],
@@ -133,12 +148,15 @@ class LauchFound(DidRocketLaunchYetState):
         analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
-            lyr.Text(t("FOUND", frame=analyzer.actual_frame)),
+            lyr.Markdown(t(
+                "IMAGE",
+                frame=analyzer.actual_frame,
+                url=analyzer.actual_frame_url
+            )),
+            lyr.Markdown(t.FOUND),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.RESTART)],
                 ]
             )
         )
-
-        del context["frame_analyzer"]
