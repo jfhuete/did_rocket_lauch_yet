@@ -37,7 +37,7 @@ def make_whitelist():
     Don't hesitate to change this function to add more domains if you need it.
     """
 
-    out = ['ngrok']
+    out = []
     extract_domain(out)
     return out
 
@@ -139,7 +139,7 @@ if socket_path:
     }
 else:
     SERVER_BIND = {
-        'host': '127.0.0.1',
+        'host': '0.0.0.0',
         'port': int(getenv('BIND_PORT', '8666')),
     }
 
