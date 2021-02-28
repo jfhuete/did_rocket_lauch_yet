@@ -1,8 +1,11 @@
 # coding: utf-8
 from os import getenv, path
+import time
 from urllib.parse import urlparse
 
 import requests
+
+from did_rocket_launch_yet.exceptions import NgrokProxyConnectionError
 
 
 def get_ngrok_public_url():
@@ -11,10 +14,27 @@ def get_ngrok_public_url():
     """
 
     ngrok_local_url = getenv('NGROK_LOCAL_URL')
-    response = requests.get(f"{ngrok_local_url}/api/tunnels")
-    body = response.json()
 
-    return body['tunnels'][0]['public_url']
+    public_url = None
+
+    # Sometimes app run before ngrok can configure a public url, for this
+    # reason a IndexError or KeyError is raised. To avoid this error this
+    # method retry to get public url from ngrok 3 times each 3 seconds. If in
+    # this retries can't to get a public url from ngrok a
+    # NgrokProxyConnectionError is raised
+    for _ in range(3):
+        try:
+            response = requests.get(f"{ngrok_local_url}/api/tunnels")
+            body = response.json()
+            public_url = body['tunnels'][0]['public_url']
+            break
+        except (IndexError, KeyError):
+            time.sleep(3)
+
+    if public_url is None:
+        raise NgrokProxyConnectionError()
+
+    return public_url
 
 
 def extract_domain(output):
