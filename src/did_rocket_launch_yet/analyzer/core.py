@@ -1,5 +1,6 @@
 from bernard.conf import settings
 from did_rocket_launch_yet.analyzer.api import FrameXApi
+from did_rocket_launch_yet.analyzer.image import FrameXImage
 
 
 class FrameXAnalyzer:
@@ -17,6 +18,7 @@ class FrameXAnalyzer:
         self.last_frame = self.api.video.frames - 1
         self.firts_frame = 0
         self.actual_frame = self.__calculate_middle_frame()
+        self.image_loader = FrameXImage()
 
     @property
     def actual_frame(self):
@@ -36,6 +38,7 @@ class FrameXAnalyzer:
         """
 
         self.__actual_frame = frame
+        self.image = self.image_loader.get_image(frame)
 
         return self.__actual_frame
 
