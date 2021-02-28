@@ -14,13 +14,37 @@ class FrameXApi:
 
     def __init__(self, video_name):
         self.api_url = settings.FRAMEX_API_URL
+        self.video_name = video_name
+        self.__video = None
 
-        response = requests.get(self.api_url)
-        body = response.json()
+    @property
+    def video(self):
+        """
+        Property that is FrameXVideo instance
 
-        self.video = FrameXVideo(
-            **next(filter(lambda x: x['name'] == video_name, body))
-        )
+        This property request to Frame X Api the metadata of the video called as
+        video_name attribute. This property will be cached
+        """
+
+        if self.__video is None:
+            response = requests.get(self.api_url)
+            body = response.json()
+
+            self.__video = FrameXVideo(
+                **next(filter(lambda x: x['name'] == self.video_name, body))
+            )
+
+        return self.__video
+
+    def get_frame_url(self, n_frame):
+        """
+        This method return the url of the frame passed by arg
+
+        :param n_frame: Number of the frame to generate Frame X Api url
+        :type n_frame: int
+        """
+
+        return f"{self.video.url}frame/{n_frame}"
 
     def get_frame(self, n_frame):
         """
@@ -35,8 +59,7 @@ class FrameXApi:
         :rtype: class:`BytesIO`
         """
 
-        return requests.get(
-            f"{self.video.url}frame/{n_frame}", stream=True).raw
+        return requests.get(self.get_frame_url, stream=True).raw
 
 
 class FrameXVideo:
