@@ -18,16 +18,16 @@ class DidRocketLaunchYetState(BaseState):
     CONFUSED texts are defined in `i18n/en/responses.csv`.
     """
 
-    @page_view('/bot/error')
+    @page_view("/bot/error")
     async def error(self) -> None:
         """
-        This happens when something goes wrong (it's the equivalent of the
+        This happens when something goes wrong (it"s the equivalent of the
         HTTP error 500).
         """
 
         self.send(lyr.Text(t.ERROR))
 
-    @page_view('/bot/confused')
+    @page_view("/bot/confused")
     async def confused(self) -> None:
         """
         This is called when the user sends a message that triggers no
@@ -45,13 +45,12 @@ class Welcome(DidRocketLaunchYetState):
     Welcome state say hello and invite to play
     """
 
-    @page_view('/bot/welcome')
+    @page_view("/bot/welcome")
     async def handle(self):
-
         name = await self.request.user.get_friendly_name()
 
         self.send(
-            lyr.Text(t('WELCOME', name=name)),
+            lyr.Text(t("WELCOME", name=name)),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.START)],
@@ -65,20 +64,22 @@ class FirstFrame(DidRocketLaunchYetState):
     In this state the firts frame will be showed
     """
 
-    @page_view('/bot/firtsframe')
+    @page_view("/bot/firtsframe")
     @cs.inject()
     async def handle(self, context):
+        if "frame_analyzer" in context:
+            del context["frame_analyzer"]
         analyzer = FrameXAnalyzer()
 
         self.send(
-            lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
+            lyr.Text(t("QUESTION", frame=analyzer.actual_frame)),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.YES), KeyboardButton(t.NO)],
                 ]
             )
         )
-        context['frame_analyzer'] = analyzer.instance_data
+        context["frame_analyzer"] = analyzer.instance_data
 
 
 class RocketNotLaunched(DidRocketLaunchYetState):
@@ -86,10 +87,10 @@ class RocketNotLaunched(DidRocketLaunchYetState):
     This state search a new frame from actual_frame to last_frame
     """
 
-    @page_view('/bot/rocketnotlaunched')
+    @page_view("/bot/rocketnotlaunched")
     @cs.inject()
     async def handle(self, context):
-        analyzer = FrameXAnalyzer(**context['frame_analyzer'])
+        analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
@@ -106,13 +107,13 @@ class RocketLaunched(DidRocketLaunchYetState):
     This state search a new frame from first_frame to actual_frame
     """
 
-    @page_view('/bot/rocketlaunched')
+    @page_view("/bot/rocketlaunched")
     @cs.inject()
     async def handle(self, context):
-        analyzer = FrameXAnalyzer(**context['frame_analyzer'])
+        analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
-            lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
+            lyr.Text(t("QUESTION", frame=analyzer.actual_frame)),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.YES), KeyboardButton(t.NO)],
@@ -121,23 +122,23 @@ class RocketLaunched(DidRocketLaunchYetState):
         )
 
 
-
-
 class LauchFound(DidRocketLaunchYetState):
     """
     In this state the exact time when the rocket is launched is found
     """
 
-    @page_view('/bot/launchfound')
+    @page_view("/bot/launchfound")
     @cs.inject()
     async def handle(self, context):
-        analyzer = FrameXAnalyzer(**context['frame_analyzer'])
+        analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         self.send(
-            lyr.Text(t('FOUND', frame=analyzer.actual_frame)),
+            lyr.Text(t("FOUND", frame=analyzer.actual_frame)),
             ReplyKeyboard(
                 keyboard=[
                     [KeyboardButton(t.RESTART)],
                 ]
             )
         )
+
+        del context["frame_analyzer"]
