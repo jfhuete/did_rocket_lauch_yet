@@ -22,7 +22,7 @@ class FrameXAnalyzer:
         self.api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
 
         if last_frame is None:
-            self.last_frame = api.video.frames - 1
+            self.last_frame = self.api.video.frames - 1
         else:
             self.last_frame = last_frame
         self.first_frame = 0 if first_frame is None else first_frame
@@ -81,8 +81,7 @@ class FrameXAnalyzer:
         return {
             "actual_frame": self.actual_frame,
             "last_frame": self.last_frame,
-            "first_frame": self.first_frame,
-            "frame_url": self.actual_frame_url
+            "first_frame": self.first_frame
         }
 
     def __calculate_middle_frame(self):
