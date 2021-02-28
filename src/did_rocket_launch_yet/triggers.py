@@ -27,7 +27,11 @@ class Afirmation(Text):
     # noinspection PyMethodOverriding
     @cs.inject()
     async def rank(self, context) -> float:
-        analyzer = FrameXAnalyzer(**context['frame_analyzer'])
+
+        if not "frame_analyzer" in context:
+            return .0
+
+        analyzer = FrameXAnalyzer(**context["frame_analyzer"])
 
         try:
             user_reply = self.request.get_layer(lyr.RawText).text
@@ -36,7 +40,7 @@ class Afirmation(Text):
 
         is_launched = user_reply == "Yes"
         analyzer.get_next_frame(is_launched=is_launched)
-        context['frame_analyzer'] = analyzer.instance_data
+        context["frame_analyzer"] = analyzer.instance_data
 
         found_condition = self.is_found == analyzer.frame_found
         intent_condition = await super().rank() == 1.
