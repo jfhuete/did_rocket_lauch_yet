@@ -3,7 +3,8 @@ CONFUSED,Whoops! I didn't understand you. Say hello to wake up me.
 WELCOME,Hello  {name}!! Do you want to play to Did rocket launch yet? Press to start game!
 START,Start game
 RESTART,Try Again
-QUESTION, Did the rocket lauch yet? {frame}!
-FOUND, Congratulations! The exact frame when the rocket is launched is found! {frame}!
+QUESTION, Did the rocket launch yet?
+IMAGE, [{frame}]({url})
+FOUND, Congratulations! The exact frame when the rocket is launched is found!
 YES,Yes
 NO,No
