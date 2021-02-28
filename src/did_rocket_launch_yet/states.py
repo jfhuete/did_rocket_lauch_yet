@@ -1,16 +1,9 @@
 # coding: utf-8
-from bernard import (
-    layers as lyr,
-)
-from bernard.analytics import (
-    page_view,
-)
-from bernard.engine import (
-    BaseState,
-)
-from bernard.i18n import (
-    translate as t,
-)
+from bernard import layers as lyr
+from bernard.platforms.telegram.layers import ReplyKeyboard, KeyboardButton
+from bernard.analytics import page_view
+from bernard.engine import BaseState
+from bernard.i18n import translate as t
 
 
 class DidRocketLaunchYetState(BaseState):
@@ -44,16 +37,21 @@ class DidRocketLaunchYetState(BaseState):
         raise NotImplementedError
 
 
-class Hello(DidRocketLaunchYetState):
+class Welcome(DidRocketLaunchYetState):
     """
-    Example "Hello" state, to show you how it's done. You can remove it.
-
-    Please note the @page_view decorator that allows to track the viewing of
-    this page using the analytics provider set in the configuration. If there
-    is no analytics provider, nothing special will happen and the handler
-    will be called as usual.
+    Welcome state say hello and invite to play
     """
 
-    @page_view('/bot/hello')
+    @page_view('/bot/welcome')
     async def handle(self):
-        self.send(lyr.Text(t.HELLO))
+
+        name = await self.request.user.get_friendly_name()
+
+        self.send(
+            lyr.Text(t('WELCOME', name=name)),
+            ReplyKeyboard(
+                keyboard=[
+                    [KeyboardButton(t.START)],
+                ]
+            )
+        )
