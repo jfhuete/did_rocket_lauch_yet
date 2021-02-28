@@ -1,6 +1,5 @@
 from bernard.conf import settings
 from did_rocket_launch_yet.analyzer.api import FrameXApi
-from did_rocket_launch_yet.analyzer.image import FrameXImage
 
 
 class FrameXAnalyzer:
@@ -19,41 +18,15 @@ class FrameXAnalyzer:
     """
 
     def __init__(self, first_frame=None, last_frame=None, actual_frame=None):
-        self.image_loader = FrameXImage()
-        self.__actual_frame = actual_frame
-        self.image = None
+
+        self.api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
 
         if last_frame is None:
-            api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
             self.last_frame = api.video.frames - 1
         else:
             self.last_frame = last_frame
         self.first_frame = 0 if first_frame is None else first_frame
-
-        # If actual frame is None firts frame is replied. If is not None is not
-        # necessary to request the image corresponds with the actual_frame
-        if actual_frame is None:
-            self.actual_frame = self.__calculate_middle_frame()
-
-    @property
-    def actual_frame(self):
-        """
-        Return the private actual_frame attribute
-        """
-
-        return self.__actual_frame
-
-    @actual_frame.setter
-    def actual_frame(self, frame):
-        """
-        Set private attribute actual_frame number and download this frame
-
-        :param frame: Number of the actual frame
-        :type frame: int
-        """
-
-        self.__actual_frame = frame
-        self.image = self.image_loader.get_image(frame)
+        self.actual_frame = self.__calculate_middle_frame()
 
     def get_next_frame(self, is_launched):
         """
@@ -77,7 +50,8 @@ class FrameXAnalyzer:
             if not is_launched else self.first_frame
         self.actual_frame = self.__calculate_middle_frame()
 
-        return self.image if not self.frame_found else None
+        return self.api.get_frame_url(self.actual_frame) \
+             if not self.frame_found else None
 
     @property
     def frame_found(self):
