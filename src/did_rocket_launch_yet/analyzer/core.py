@@ -50,8 +50,15 @@ class FrameXAnalyzer:
             if not is_launched else self.first_frame
         self.actual_frame = self.__calculate_middle_frame()
 
-        return self.api.get_frame_url(self.actual_frame) \
-             if not self.frame_found else None
+        return self.actual_frame_url if not self.frame_found else None
+
+    @property
+    def actual_frame_url(self):
+        """
+        Return the url for the actual_frame property
+        """
+
+        return self.api.get_frame_url(self.actual_frame)
 
     @property
     def frame_found(self):
@@ -74,7 +81,8 @@ class FrameXAnalyzer:
         return {
             "actual_frame": self.actual_frame,
             "last_frame": self.last_frame,
-            "first_frame": self.first_frame
+            "first_frame": self.first_frame,
+            "frame_url": self.actual_frame_url
         }
 
     def __calculate_middle_frame(self):
