@@ -13,12 +13,12 @@ class FrameXAnalyzer:
 
     def __init__(self):
         self.api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
+        self.image_loader = FrameXImage()
         self.__actual_frame = None
         self.image = None
         self.last_frame = self.api.video.frames - 1
         self.firts_frame = 0
         self.actual_frame = self.__calculate_middle_frame()
-        self.image_loader = FrameXImage()
 
     @property
     def actual_frame(self):
