@@ -23,7 +23,6 @@ class Afirmation(Text):
     def __init__(self, request, intent, is_found):
         super().__init__(request, intent)
         self.is_found = is_found
-        self.is_launched = None
 
     # noinspection PyMethodOverriding
     @cs.inject()
@@ -35,7 +34,9 @@ class Afirmation(Text):
         except (KeyError, ValueError, TypeError):
             return .0
 
-        self.is_launched = user_reply == "Yes"
+        is_launched = user_reply == "Yes"
+        analyzer.get_next_frame(is_launched=is_launched)
+        context['frame_analyzer'] = analyzer.instance_data
 
         found_condition = self.is_found == analyzer.frame_found
         intent_condition = await super().rank() == 1.

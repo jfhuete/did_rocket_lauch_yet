@@ -19,12 +19,15 @@ class FrameXAnalyzer:
     """
 
     def __init__(self, first_frame=None, last_frame=None, actual_frame=None):
-        self.api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
         self.image_loader = FrameXImage()
         self.__actual_frame = actual_frame
         self.image = None
-        self.last_frame = self.api.video.frames - 1 \
-            if last_frame is None else last_frame
+
+        if last_frame is None:
+            api = FrameXApi(video_name=settings.FRAMEX_VIDEO_NAME)
+            self.last_frame = api.video.frames - 1
+        else:
+            self.last_frame = last_frame
         self.first_frame = 0 if first_frame is None else first_frame
 
         # If actual frame is None firts frame is replied. If is not None is not
@@ -85,7 +88,8 @@ class FrameXAnalyzer:
         or last frame
         """
 
-        return self.actual_frame in [self.last_frame, self.first_frame]
+        return self.actual_frame in [self.last_frame, self.first_frame] or \
+            abs(self.last_frame - self.first_frame) == 2
 
     @property
     def instance_data(self):

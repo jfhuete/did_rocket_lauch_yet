@@ -69,7 +69,6 @@ class FirstFrame(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer()
-        analyzer.get_next_frame(is_launched=False)
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
@@ -91,7 +90,6 @@ class RocketNotLaunched(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer(**context['frame_analyzer'])
-        analyzer.get_next_frame(is_launched=self.trigger.is_launched)
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
@@ -101,8 +99,6 @@ class RocketNotLaunched(DidRocketLaunchYetState):
                 ]
             )
         )
-
-        context['frame_analyzer'] = analyzer.instance_data
 
 
 class RocketLaunched(DidRocketLaunchYetState):
@@ -114,7 +110,6 @@ class RocketLaunched(DidRocketLaunchYetState):
     @cs.inject()
     async def handle(self, context):
         analyzer = FrameXAnalyzer(**context['frame_analyzer'])
-        analyzer.get_next_frame(is_launched=self.trigger.is_launched)
 
         self.send(
             lyr.Text(t('QUESTION', frame=analyzer.actual_frame)),
@@ -125,7 +120,7 @@ class RocketLaunched(DidRocketLaunchYetState):
             )
         )
 
-        context['frame_analyzer'] = analyzer.instance_data
+
 
 
 class LauchFound(DidRocketLaunchYetState):
