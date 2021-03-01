@@ -5,8 +5,8 @@ from bernard.analytics import page_view
 from bernard.engine import BaseState
 from bernard.i18n import translate as t
 
-from did_rocket_launch_yet.store import cs
-from did_rocket_launch_yet.analyzer import FrameXAnalyzer
+from src.did_rocket_launch_yet.store import cs
+from src.did_rocket_launch_yet.analyzer import FrameXAnalyzer
 
 
 class DidRocketLaunchYetState(BaseState):

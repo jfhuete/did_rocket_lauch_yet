@@ -1,8 +1,8 @@
 from bernard import layers as lyr
 from bernard.engine.triggers import Text
 
-from did_rocket_launch_yet.store import cs
-from did_rocket_launch_yet.analyzer import FrameXAnalyzer
+from src.did_rocket_launch_yet.store import cs
+from src.did_rocket_launch_yet.analyzer import FrameXAnalyzer
 
 
 class Afirmation(Text):

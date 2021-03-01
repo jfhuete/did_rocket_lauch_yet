@@ -3,10 +3,10 @@
 from bernard.engine import Tr, triggers as trg
 from bernard.i18n import intents as its
 
-from did_rocket_launch_yet.states import (
+from src.did_rocket_launch_yet.states import (
     Welcome, FirstFrame, RocketLaunched, RocketNotLaunched, LauchFound
 )
-from did_rocket_launch_yet.triggers import Afirmation
+from src.did_rocket_launch_yet.triggers import Afirmation
 
 
 transitions = [

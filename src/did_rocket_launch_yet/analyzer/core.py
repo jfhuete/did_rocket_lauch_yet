@@ -1,5 +1,5 @@
 from bernard.conf import settings
-from did_rocket_launch_yet.analyzer.api import FrameXApi
+from src.did_rocket_launch_yet.analyzer.api import FrameXApi
 
 
 class FrameXAnalyzer:
