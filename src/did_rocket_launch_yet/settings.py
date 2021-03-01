@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from did_rocket_launch_yet.exceptions import NgrokProxyConnectionError
+from src.did_rocket_launch_yet.exceptions import NgrokProxyConnectionError
 
 
 def get_ngrok_public_url():
