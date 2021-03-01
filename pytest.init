@@ -1,0 +1,5 @@
+[pytest]
+minversion = 5.0
+addopts = --flake8 .
+testpaths = tests
+flake8-max-line-length = 80
