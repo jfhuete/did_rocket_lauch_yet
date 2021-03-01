@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source ./env
+BERNARD_SETTINGS_FILE=tests/settings.py
+
 pytest -c pytest.init
 
 TESTS_RESULTS=$?
