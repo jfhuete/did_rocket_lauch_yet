@@ -70,7 +70,7 @@ You have an example of this file in **./private/private-env.example**
 Before launch the app you have to build the docker images. Is important do this
 launching the next script:
 
-  > ./build.sh
+  > ./scripts/build.sh
 
 ## Launch app
 
