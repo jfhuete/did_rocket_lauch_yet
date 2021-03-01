@@ -5,7 +5,6 @@ from did_rocket_launch_yet.store import cs
 from did_rocket_launch_yet.analyzer import FrameXAnalyzer
 
 
-
 class Afirmation(Text):
     """
     This trigger interpret the user reply as yes or no, but also detect if the
@@ -28,7 +27,7 @@ class Afirmation(Text):
     @cs.inject()
     async def rank(self, context) -> float:
 
-        if not "frame_analyzer" in context:
+        if "frame_analyzer" not in context:
             return .0
 
         analyzer = FrameXAnalyzer(**context["frame_analyzer"])
